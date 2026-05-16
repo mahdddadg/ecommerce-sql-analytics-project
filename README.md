@@ -65,8 +65,8 @@ The database contains 5 tables:
 │   ├── 05_product_performance_analysis.sql
 │   ├── 06_return_rate_analysis.sql
 │   ├── 07_shipping_performance_analysis.sql
-│   ├── 08_business_case_studies.sql
-│   └── 09_cohort_retention_analysis.sql
+│    
+│    ── 08_cohort_retention_analysis.sql
 │
 |
 │
