@@ -1,3 +1,12 @@
+## 🌟 About Me 🌟
+
+Hi, I'm **Mahdi Dehlaghi** — a **Data Analyst** , Bachlor degree graduated (IT) and passionate about data engineering, analytics, and building scalable data solutions.
+
+🔗 Connect with me:
+
+* LinkedIn: https://www.linkedin.com/in/mahdi-dehlaghi-24b7153a2
+* Email : dehlaghimahdi@gmail.com
+
 # E-commerce SQL Analytics Project
 
 ## Overview
@@ -71,6 +80,12 @@ The database contains 5 tables:
 |
 │
 ------
+check out my other projects --->
+
+# Data Warehouse and Analytics Project :
+https://github.com/mahdddadg/sql-data-warehouse
+
+# SQL Exploratory Data Analysis (EDA) :
+https://github.com/mahdddadg/Exploratory-Data-Analysis-EDA-
 
 
-```
