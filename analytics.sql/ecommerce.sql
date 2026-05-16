@@ -7,7 +7,7 @@ sum (o.sales) as totall_revenue ,
 sum (o.profit ) as totall_profit , 
 count(distinct order_id ) as  totall_orders ,
 count( distinct c.customer_id ) as totall_customer ,
-avg (sales ) as avg_order_value
+avg (sales ) as Average_sales
 
 from orders as o
 left join customers as c 
@@ -42,7 +42,7 @@ coalesce(trim(c.first_name),'')+' '+coalesce(trim(c.last_name),'') as customer_n
 count (distinct order_id ) as totall_order ,
 sum (sales ) as totall_spending ,
 sum (profit ) as totall_profit ,
-rank () over (order by sum (profit ) desc ) as customer_rank
+rank () over (order by sum (sales ) desc ) as customer_rank
 
 
 from orders as o
@@ -52,38 +52,31 @@ group by c.customer_id, coalesce(trim(c.first_name),'')+' '+coalesce(trim(c.last
 
 go
 --------------------------------------------------------4-----------------------------monthly_sales_growth 
-with cte_sales_detail as (
+with monthly_sales as (
+
 select
 
-order_id , 
-year(order_date) as year ,
-month(order_date) as month ,
-sum(sales) as totall_sales
-
+year(order_date) as sales_year,
+month(order_date) as sales_month,
+sum(sales) as total_sales
 from orders
-group by year(order_date) ,month(order_date) ,order_id
-
+group by
+year(order_date),
+month(order_date)
 )
 
-select 
+select
+sales_year,
+sales_month,
+total_sales,
+ 
+lag(total_sales, 1)over( partition by sales_year order by sales_month) as previous_month_sales,
 
-csd.year ,
-csd.month,
-csd.totall_sales ,
+ cast( (total_sales -  lag(total_sales, 1)  over( partition by sales_year order by sales_month)) * 100.0 /
+nullif(lag(total_sales, 1)over( partition by sales_year order by sales_month), 0 )
+as decimal(10,2)) as growth_percentage
 
-LAG(csd.totall_sales,1) 
-OVER (PARTITION BY csd.year ORDER BY csd.month) 
-AS previous_month_sales ,
-CAST(((csd.totall_sales - LAG(csd.totall_sales,1) OVER (PARTITION BY csd.year ORDER BY csd.month))* 100.0)   /
-
-NULLIF(LAG(csd.totall_sales,1) OVER (PARTITION BY csd.year ORDER BY csd.month),0)AS DECIMAL(10,2)) AS growth_percentage
-
-
-
-from orders as o
-left join cte_sales_detail as csd
-on o.order_id = csd.order_id
-
+from monthly_sales;
 
 
 go
@@ -117,7 +110,7 @@ go
 select
 
 order_status,
-sum( distinct order_id ) as totall_orders  ,
+count( distinct order_id ) as totall_orders  ,
 cast(count(distinct order_id) * 100.0 / sum(count(distinct order_id))over ()  as decimal(10,2)) as percentage_of_total
 
 from orders
@@ -188,18 +181,20 @@ go
 
 select
 
-ship_mode ,
-datediff (day ,sh.ship_date,sh.delivery_date) as avg_delivery_days , 
-count (o.order_id) as totall_orders ,
-case 
-when datediff (day ,sh.ship_date,sh.delivery_date) >= 5 then 'Delayed orders'
-else 'Normal shipping'
-end as delayed_orders
+    sh.ship_mode,
+
+    avg( datediff(day, sh.ship_date, sh.delivery_date)) as avg_delivery_days,
+    count(o.order_id) as total_orders,
+    sum(case when datediff(day, sh.ship_date, sh.delivery_date) >= 5
+            then 1
+            else 0 end ) as delayed_orders
 
 from shipping as sh
-left join orders as o
-on sh.order_id = o.order_id
-group by ship_mode , datediff (day ,ship_date,delivery_date) 
+
+inner join orders as o
+on sh.order_id = o.order_id 
+group by sh.ship_mode
+
 
 
 
