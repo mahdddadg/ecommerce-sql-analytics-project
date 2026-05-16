@@ -52,6 +52,15 @@ The database contains 5 tables:
 ## Tools Used
 
 - SQL Server
+##
+check out my other projects --->
+
+# Data Warehouse and Analytics Project :
+https://github.com/mahdddadg/sql-data-warehouse
+
+# SQL Exploratory Data Analysis (EDA) :
+https://github.com/mahdddadg/Exploratory-Data-Analysis-EDA-
+  
 
 
 ## Project Structure
@@ -80,12 +89,6 @@ The database contains 5 tables:
 |
 │
 ------
-check out my other projects --->
 
-# Data Warehouse and Analytics Project :
-https://github.com/mahdddadg/sql-data-warehouse
-
-# SQL Exploratory Data Analysis (EDA) :
-https://github.com/mahdddadg/Exploratory-Data-Analysis-EDA-
 
 
